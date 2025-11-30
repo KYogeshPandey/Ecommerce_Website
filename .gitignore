@@ -1,0 +1,22 @@
+# 1. Dependencies (Isse 1k commits wali problem solve hogi)
+node_modules/
+
+# 2. Security (Sabse Zaroori - Passwords chupaane ke liye)
+.env
+
+# 3. Logs (System errors jo upload nahi hone chahiye)
+npm-debug.log
+error.log
+logs/
+*.log
+
+# 4. OS Files (Mac/Windows ki bekaar files)
+.DS_Store
+Thumbs.db
+
+# 5. Editor Config (VS Code settings)
+.vscode/
+.idea/
+
+# Note: Public folder ke andar ki images upload hongi, jo sahi hai.
+# Agar future mein user upload images handle karein, toh unhe yahan add kar dena.
