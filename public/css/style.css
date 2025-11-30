@@ -1,78 +1,260 @@
+/* --- General Reset & Fonts --- */
+:root {
+    --primary-bg: #0F172A;
+    --dark-surface: #1E293B;
+    --accent-cyan: #38BDF8;
+    --accent-blue: #6366F1;
+    --accent-green: #22C55E;
+    --text-light: #F8FAFC;
+}
+
+/* IMPORTANT: Smooth scrolling for anchor links */
+html {
+    scroll-behavior: smooth;
+}
+
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f8f9fa;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--primary-bg);
+    color: var(--text-light);
+    overflow-x: hidden;
 }
 
-.navbar-brand {
-    font-weight: bold;
-    font-size: 1.5rem;
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
 }
 
-.card {
-    transition: transform 0.2s;
+/* --- Top Contact Bar --- */
+.top-bar {
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.social-icons a {
+    color: rgba(255, 255, 255, 0.6);
+    transition: 0.3s;
+    font-size: 1rem;
+}
+.social-icons a:hover {
+    color: #fff;
+    transform: translateY(-2px);
+}
+.small-text {
+    font-size: 0.85rem;
+}
+
+/* --- Navigation Bar (Sticky & Glass) --- */
+.custom-navbar {
+    background: rgba(15, 23, 42, 0.85); /* Slightly darker for readability */
+    -webkit-backdrop-filter: blur(12px); 
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 15px 0;
+    transition: all 0.3s ease-in-out;
+    z-index: 1000; /* Ensure it stays on top */
+}
+
+.nav-link {
+    font-weight: 500;
+    transition: 0.3s;
+    margin: 0 10px;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--accent-cyan) !important;
+    opacity: 1 !important;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Signup button size adjustment */
+.small-btn {
+    font-size: 0.9rem;
+    padding: 8px 24px;
+}
+
+/* --- Hero Section --- */
+.hero-section {
+    min-height: 90vh;
+    position: relative;
+    padding: 80px 0;
+    overflow: hidden;
+    background: radial-gradient(circle at top left, #1e293b, #0f172a);
+}
+
+/* Background Blurs (Glowing Orbs) */
+.blur-circle {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    filter: blur(100px);
+    z-index: 1;
+    opacity: 0.5;
+}
+.blur-blue {
+    top: 10%;
+    right: 20%;
+    background: rgba(56, 189, 248, 0.3);
+}
+.blur-green {
+    bottom: 10%;
+    left: 10%;
+    background: rgba(34, 197, 94, 0.2);
+}
+
+/* --- Typography & Badges --- */
+.badge-pill {
+    background: rgba(56, 189, 248, 0.15);
+    color: var(--accent-cyan);
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.text-gradient {
+    background: linear-gradient(90deg, #38BDF8, #6366F1);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-title {
+    line-height: 1.2;
+}
+
+.hero-description {
+    max-width: 500px;
+}
+
+/* --- Buttons --- */
+.btn-primary-gradient {
+    background: linear-gradient(90deg, #38BDF8, #6366F1);
     border: none;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.btn-primary-gradient:hover {
+    transform: translateY(-3px);
+    color: white;
+    box-shadow: 0 15px 30px rgba(99, 102, 241, 0.6);
 }
 
-.card:hover {
-    transform: translateY(-5px);
+.btn-glass {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    font-weight: 600;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    transition: 0.3s;
+}
+.btn-glass:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* --- Right Content (Glass Card) --- */
+.glass-card {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s;
+}
+
+.glass-card:hover {
+    transform: translateY(-5px); /* Subtle floating effect on hover */
+}
+
+.product-mini-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 20px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+.product-mini-card:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.05);
+}
+
+/* Floating Badges */
+.floating-badge {
+    position: absolute;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: white;
+    z-index: 3;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
-
-.btn-primary {
-    background-color: #0d6efd;
-    border-color: #0d6efd;
+.badge-free-shipping {
+    top: -15px;
+    left: -15px;
+    background: #22C55E;
+    transform: rotate(-5deg);
+}
+.badge-discount {
+    top: -15px;
+    right: -15px;
+    background: #F97316;
+    transform: rotate(5deg);
 }
 
-.btn-primary:hover {
-    background-color: #0b5ed7;
-    border-color: #0a58ca;
+/* Floating Action Button (Bag) */
+.floating-icon-btn {
+    position: absolute;
+    bottom: -25px;
+    right: -25px;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #38BDF8, #6366F1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.5);
+    cursor: pointer;
+    transition: 0.3s;
+}
+.floating-icon-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 15px 40px rgba(99, 102, 241, 0.7);
 }
 
-.footer {
-    background-color: #343a40;
-    color: white;
-    padding: 2rem 0;
-    margin-top: 3rem;
+/* --- Features Row (Bottom) --- */
+.feature-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: 0.3s;
+    cursor: default;
+}
+.feature-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-5px);
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Admin Sidebar */
-.sidebar {
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 250px;
-    background-color: #343a40;
-    padding-top: 1rem;
-    color: white;
-}
-
-.sidebar a {
-    padding: 10px 15px;
-    text-decoration: none;
-    font-size: 1.1rem;
-    color: #ddd;
-    display: block;
-}
-
-.sidebar a:hover {
-    color: white;
-    background-color: #495057;
-}
-
-.main-content {
-    margin-left: 250px;
-    padding: 2rem;
-}
-
-@media (max-width: 768px) {
-    .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-    }
-    .main-content {
-        margin-left: 0;
-    }
+.icon-box {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: rgba(56, 189, 248, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-cyan);
+    font-size: 1.5rem;
 }
