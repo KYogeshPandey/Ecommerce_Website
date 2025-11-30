@@ -5,9 +5,13 @@ function checkAdminAuth() {
     const token = localStorage.getItem('token');
     const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
 
-    if (!token || !user || user.role !== 'admin') {
-        alert('⛔ Access Denied! Admins only.');
+    if (!token || !user || user.role !== 'seller') {
+        alert('⛔ Access Denied! Sellers only.');
         window.location.href = '/login.html';
+    } else {
+        // Set Admin Name
+        const adminNameEl = document.getElementById('admin-name');
+        if (adminNameEl) adminNameEl.innerText = user.name;
     }
 }
 
@@ -113,7 +117,7 @@ async function handleAddProduct(e) {
         price: document.getElementById('price').value,
         category: document.getElementById('category').value,
         image: document.getElementById('image').value,
-        stock: 10 
+        stock: 10
     };
 
     try {
@@ -140,17 +144,17 @@ async function handleAddProduct(e) {
 }
 
 // 🗑️ Delete Product (Global Function)
-window.deleteProduct = async function(id) {
+window.deleteProduct = async function (id) {
     if (!confirm('Are you sure?')) return;
     const token = localStorage.getItem('token');
-    
+
     try {
         const res = await fetch(`${API_URL}/products/${id}`, {
             method: 'DELETE',
             headers: { 'Authorization': `Bearer ${token}` }
         });
         if (res.ok) {
-            loadAdminProducts(); 
+            loadAdminProducts();
         } else {
             alert('Failed to delete');
         }

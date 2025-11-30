@@ -1,7 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 // Ensure karein ki aapne 'npm install open' run kiya hua hai
-const open = require('open'); 
+const open = require('open');
 const cors = require('cors');
 const path = require('path');
 
@@ -28,6 +28,7 @@ app.use('/products', require('./routes/productRoutes'));
 app.use('/cart', require('./routes/cartRoutes'));
 app.use('/orders', require('./routes/orderRoutes'));
 app.use('/payment', require('./routes/paymentRoutes'));
+app.use('/user', require('./routes/userRoutes'));  // New user routes for buyer dashboard
 
 // Serve frontend
 app.get('/', (req, res) => {
@@ -40,7 +41,7 @@ const PORT = process.env.PORT || 5000;
 // Callback function ke aage 'async' lagaya hai
 app.listen(PORT, async () => {
     console.log(`Server running on port ${PORT}`);
-    
+
     // Browser open karne wala code ISKE ANDAR aayega
     try {
         await open(`http://localhost:${PORT}`);

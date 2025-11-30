@@ -20,6 +20,12 @@ const registerUser = async (req, res) => {
         return;
     }
 
+    // Validate role if provided
+    if (role && !['buyer', 'seller'].includes(role)) {
+        res.status(400).json({ message: 'Invalid role. Must be buyer or seller' });
+        return;
+    }
+
     // Check if user exists
     const userExists = await User.findOne({ email });
 
@@ -37,7 +43,7 @@ const registerUser = async (req, res) => {
         name,
         email,
         password: hashedPassword,
-        role: role || 'user'
+        role: role || 'buyer'  // Default to buyer
     });
 
     if (user) {

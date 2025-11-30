@@ -258,3 +258,101 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--accent-cyan);
     font-size: 1.5rem;
 }
+
+/* --- Categories Section --- */
+.category-card {
+    height: 250px;
+    cursor: pointer;
+}
+.category-card img {
+    height: 100%;
+    object-fit: cover;
+    transition: 0.5s;
+}
+.category-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    opacity: 0.9;
+    transition: 0.3s;
+}
+.category-card:hover img {
+    transform: scale(1.1);
+}
+
+/* --- Product Mini Cards (Glass Card Grid) --- */
+.product-mini-card {
+    background: rgba(255, 255, 255, 0.1); /* Thoda transparent background */
+    border-radius: 20px;
+    overflow: hidden; /* Image corner round rahein */
+    aspect-ratio: 1/1; /* Card humesha square rahega */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+}
+
+.product-mini-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Image poora space legi bina stretch hue */
+    transition: 0.5s;
+}
+
+.product-mini-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+
+/* --- Contact Section --- */
+.icon-box-sm {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(56, 189, 248, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-cyan);
+    font-size: 1.2rem;
+}
+
+/* Form Inputs */
+.form-control:focus {
+    background-color: rgba(255,255,255,0.05);
+    border-color: var(--accent-cyan);
+    color: white;
+    box-shadow: none;
+}
+.form-floating label {
+    color: rgba(255,255,255,0.5);
+}
+.border-light-subtle {
+    border-color: rgba(255,255,255,0.1) !important;
+}
+
+/* --- Auth Pages (Login/Register) --- */
+.auth-container {
+    min-height: 100vh;
+    width: 100%;
+    background: radial-gradient(circle at center, #1e293b, #0f172a);
+    position: relative;
+    overflow: hidden;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 450px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Checkbox Style */
+.form-check-input:checked {
+    background-color: var(--accent-cyan);
+    border-color: var(--accent-cyan);
+}
