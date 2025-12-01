@@ -7,121 +7,18 @@
     <title>Login - ShopEase</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- Main Stylesheet -->
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        /* Internal Styles specific to Login Lamp Page */
-        body {
-            background: radial-gradient(circle at top left, #1e293b, #0f172a);
-            background-color: #0f172a;
-            overflow: hidden;
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            color: #F8FAFC;
-        }
-
-        /* --- Lamp Container --- */
-        .lamp-container {
-            position: relative;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            z-index: 5;
-            margin-top: -50px;
-        }
-
-        .lamp-img {
-            max-width: 600px;
-            width: 100%;
-            height: auto;
-            filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.5));
-            transition: opacity 0.5s ease;
-        }
-
-        /* --- Light Glow Effect --- */
-        .light-glow {
-            position: absolute;
-            top: 60%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(255, 220, 100, 0.15) 0%, rgba(255, 220, 100, 0) 70%);
-            pointer-events: none;
-            z-index: 1;
-            opacity: 0;
-            transition: opacity 0.8s ease;
-        }
-
-        /* --- Login Form --- */
-        .login-container {
-            position: absolute;
-            top: 40%;
-            z-index: 10;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-        }
-
-        .glass-form {
-            background: rgba(255, 255, 255, 0.05);
-            -webkit-backdrop-filter: blur(12px);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 2.5rem;
-            width: 380px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-            text-align: center;
-        }
-
-        /* --- Typography --- */
-        h2 { font-family: 'Poppins', sans-serif; font-weight: 700; color: #fff; margin-bottom: 0.5rem; }
-        .text-gradient { background: linear-gradient(90deg, #38BDF8, #6366F1); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-        .subtitle { color: rgba(255, 255, 255, 0.6); font-size: 0.9rem; margin-bottom: 1.5rem; }
-
-        /* --- Inputs --- */
-        .form-control { background: rgba(15, 23, 42, 0.6) !important; border: 1px solid rgba(255, 255, 255, 0.1); color: #fff !important; border-radius: 10px; }
-        .form-control:focus { background: rgba(15, 23, 42, 0.8) !important; border-color: #38BDF8; box-shadow: 0 0 0 0.25rem rgba(56, 189, 248, 0.15); }
-        .form-floating label { color: rgba(255, 255, 255, 0.5); }
-
-        /* --- Button --- */
-        .btn-primary-gradient { background: linear-gradient(90deg, #38BDF8, #6366F1); border: none; color: white; font-weight: 600; margin-top: 10px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
-        .btn-primary-gradient:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5); color: white; }
-
-        /* --- Switch --- */
-        .switch-wrapper { position: absolute; top: 30px; right: 30px; z-index: 50; display: flex; align-items: center; gap: 10px; }
-        .switch-label { color: rgba(255, 255, 255, 0.5); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 500; }
-        .form-check-input:checked { background-color: #38BDF8; border-color: #38BDF8; }
-        #lightSwitch { width: 45px; height: 24px; cursor: pointer; }
-
-        /* --- States --- */
-        body.lights-on .light-glow { opacity: 1; }
-        body.lights-on .glass-form { opacity: 1; transform: translateY(0); pointer-events: all; } /* Ensure pointer events are active when lights on */
-        .glass-form { pointer-events: none; } /* Disable form when lights off */
-        
-        body:not(.lights-on) .lamp-img { filter: brightness(0.3) grayscale(0.8); }
-        .text-accent { color: #38BDF8; }
-        .text-accent:hover { color: #6366F1; }
-    </style>
 </head>
 
-<body>
+<!-- Added 'auth-page' class to apply styles from external CSS -->
+<body class="auth-page">
 
     <!-- Light Switch -->
     <div class="switch-wrapper">
         <span class="switch-label">Lights</span>
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="lightSwitch" aria-label="Toggle Lights">
+        <div class="form-check form-switch m-0">
+            <input class="form-check-input" type="checkbox" id="lightSwitch" style="cursor: pointer;">
         </div>
     </div>
 
@@ -132,23 +29,25 @@
     </div>
 
     <!-- Login Form -->
-    <div class="login-container">
+    <div class="auth-form-container">
         <div class="glass-form">
-            <h2>Shop<span class="text-gradient">Ease</span></h2>
+            <!-- Clickable Logo to Home -->
+            <a href="index.html" class="logo-link">
+                <h2 class="mb-1">Shop<span class="text-gradient">Ease</span></h2>
+            </a>
             <p class="subtitle">Please sign in to continue</p>
 
-            <!-- ID must match JS -->
             <form id="loginForm">
                 <div class="form-floating mb-3">
                     <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
                     <label for="email">Email address</label>
                 </div>
-                <div class="form-floating mb-3">
+                <div class="form-floating mb-4">
                     <input type="password" class="form-control" id="password" placeholder="Password" required>
                     <label for="password">Password</label>
                 </div>
 
-                <button class="btn btn-primary-gradient w-100 py-3 rounded-3" type="submit">LOGIN</button>
+                <button class="btn btn-primary-gradient w-100 py-3 rounded-3 fw-bold letter-spacing-1" type="submit">LOGIN</button>
 
                 <div class="d-flex justify-content-between align-items-center mt-3 text-white-50 small">
                     <div class="form-check">
@@ -167,8 +66,61 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
-    <!-- IMPORTANT: Linking ONLY the external JS file which contains BOTH lamp logic and login logic -->
-    <script src="js/login.js"></script>
+    <!-- Integrated JS Logic -->
+    <script>
+        const switchBtn = document.getElementById('lightSwitch');
+        const body = document.body;
 
+        setTimeout(() => {
+            if (!switchBtn.checked) {
+                switchBtn.checked = true;
+                body.classList.add('lights-on');
+            }
+        }, 300);
+
+        switchBtn.addEventListener('change', () => body.classList.toggle('lights-on'));
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerText;
+
+            btn.innerText = 'LOGGING IN...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('http://localhost:5000/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data));
+                    
+                    btn.innerText = 'SUCCESS!';
+                    btn.classList.replace('btn-primary-gradient', 'btn-success');
+
+                    setTimeout(() => {
+                        window.location.href = (data.role === 'seller' || data.role === 'admin') ? '/admin/dashboard.html' : '/';
+                    }, 1000);
+                } else {
+                    alert(data.message || 'Invalid Credentials');
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }
+            } catch (error) {
+                alert('Server Error');
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        });
+    </script>
 </body>
 </html>

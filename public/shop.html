@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop All Products - ShopEase</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top custom-navbar">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-3" href="index.html">Shop<span class="text-accent">Ease</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto gap-4">
+                    <li class="nav-item"><a class="nav-link active" href="shop.html">Shop</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Categories</a>
+                        <ul class="dropdown-menu dropdown-menu-dark glass-dropdown">
+                            <li><a class="dropdown-item" href="shop.html?cat=fashion">Fashion</a></li>
+                            <li><a class="dropdown-item" href="shop.html?cat=electronics">Electronics</a></li>
+                            <li><a class="dropdown-item" href="shop.html">View All</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <!-- Auth Container (Controlled by main.js) -->
+                <div class="d-flex gap-3 align-items-center auth-buttons-container">
+                    <!-- JS will inject Login/User Menu here -->
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="py-5 mt-5 text-center">
+        <div class="container pt-5">
+            <h1 class="display-4 fw-bold text-white">All Products</h1>
+        </div>
+    </header>
+
+    <!-- Products -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row g-4" id="shop-products-container">
+                <div class="col-12 text-center">
+                    <div class="spinner-border text-primary" role="status"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-dark-surface py-4 border-top border-white border-opacity-10">
+        <div class="container text-center text-white-50"><small>&copy; 2025 ShopEase.</small></div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Link Main JS for Navbar & Badge Logic -->
+    <script src="js/main.js"></script>
+
+    <!-- Shop Specific Logic -->
+    <script>
+        // Product Loading Logic Only
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAllProducts();
+        });
+
+        async function loadAllProducts() {
+            const container = document.getElementById('shop-products-container');
+            // Extract category from URL ?cat=fashion
+            const urlParams = new URLSearchParams(window.location.search);
+            const category = urlParams.get('cat');
+            
+            let url = `${API_URL}/products`;
+            if(category) url += `?category=${category}`;
+
+            try {
+                const res = await fetch(url);
+                const products = await res.json();
+
+                if (!products || products.length === 0) {
+                    container.innerHTML = '<div class="col-12 text-center text-white-50">No products found.</div>';
+                    return;
+                }
+
+                container.innerHTML = products.map(product => `
+                    <div class="col-sm-6 col-lg-4 col-xl-3">
+                        <div class="product-card">
+                            <div class="product-img-wrapper">
+                                <img src="${product.image || 'https://via.placeholder.com/300'}" class="product-img" alt="${product.title}">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="product-title text-truncate">${product.title}</h5>
+                                <p class="small text-white-50 mb-2 text-truncate">${product.description}</p>
+                                <div class="product-price">₹${product.price}</div>
+                                <button onclick="addToCart('${product._id}')" class="btn btn-add-cart">
+                                    <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error("Error:", error);
+                container.innerHTML = '<div class="col-12 text-center text-danger">Server Error</div>';
+            }
+        }
+
+        async function addToCart(productId) {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert("Please login first!");
+                window.location.href = 'login.html';
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_URL}/cart/add`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ productId, quantity: 1 })
+                });
+
+                if (res.ok) {
+                    alert("Product added to cart!");
+                    // Call global function from main.js
+                    if(window.updateCartCount) window.updateCartCount();
+                } else {
+                    alert("Failed to add product");
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>

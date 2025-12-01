@@ -1,4 +1,6 @@
-/* --- General Reset & Fonts --- */
+/* =========================================
+   GLOBAL RESET & FONTS
+   ========================================= */
 :root {
     --primary-bg: #0F172A;
     --dark-surface: #1E293B;
@@ -8,10 +10,7 @@
     --text-light: #F8FAFC;
 }
 
-/* IMPORTANT: Smooth scrolling for anchor links */
-html {
-    scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
     font-family: 'Inter', sans-serif;
@@ -20,44 +19,28 @@ body {
     overflow-x: hidden;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    font-family: 'Poppins', sans-serif;
-}
+h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', sans-serif; }
 
-/* --- Top Contact Bar --- */
-.top-bar {
-    background: rgba(255, 255, 255, 0.05);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
+a { text-decoration: none; color: inherit; transition: 0.3s; }
 
-.social-icons a {
-    color: rgba(255, 255, 255, 0.6);
-    transition: 0.3s;
-    font-size: 1rem;
-}
-.social-icons a:hover {
-    color: #fff;
-    transform: translateY(-2px);
-}
-.small-text {
-    font-size: 0.85rem;
-}
-
-/* --- Navigation Bar (Sticky & Glass) --- */
+/* =========================================
+   NAVIGATION BAR (MAIN SITE)
+   ========================================= */
 .custom-navbar {
-    background: rgba(15, 23, 42, 0.85); /* Slightly darker for readability */
-    -webkit-backdrop-filter: blur(12px); 
+    background: rgba(15, 23, 42, 0.85);
+    -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     padding: 15px 0;
     transition: all 0.3s ease-in-out;
-    z-index: 1000; /* Ensure it stays on top */
+    z-index: 1000;
 }
 
 .nav-link {
     font-weight: 500;
     transition: 0.3s;
     margin: 0 10px;
+    color: rgba(255, 255, 255, 0.7) !important;
 }
 
 .nav-link:hover, .nav-link.active {
@@ -65,74 +48,33 @@ h1, h2, h3, h4, h5, h6 {
     opacity: 1 !important;
 }
 
-.navbar-toggler:focus {
-    box-shadow: none;
-    border-color: rgba(255, 255, 255, 0.5);
+/* Dropdown Menu */
+.dropdown-menu.glass-dropdown {
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    padding: 10px;
+    margin-top: 10px;
 }
 
-/* Signup button size adjustment */
-.small-btn {
-    font-size: 0.9rem;
-    padding: 8px 24px;
+.dropdown-item {
+    color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    padding: 8px 15px;
+    transition: all 0.2s ease;
 }
 
-/* --- Hero Section --- */
-.hero-section {
-    min-height: 90vh;
-    position: relative;
-    padding: 80px 0;
-    overflow: hidden;
-    background: radial-gradient(circle at top left, #1e293b, #0f172a);
-}
-
-/* Background Blurs (Glowing Orbs) */
-.blur-circle {
-    position: absolute;
-    width: 400px;
-    height: 400px;
-    border-radius: 50%;
-    filter: blur(100px);
-    z-index: 1;
-    opacity: 0.5;
-}
-.blur-blue {
-    top: 10%;
-    right: 20%;
-    background: rgba(56, 189, 248, 0.3);
-}
-.blur-green {
-    bottom: 10%;
-    left: 10%;
-    background: rgba(34, 197, 94, 0.2);
-}
-
-/* --- Typography & Badges --- */
-.badge-pill {
+.dropdown-item:hover, .dropdown-item:focus {
     background: rgba(56, 189, 248, 0.15);
-    color: var(--accent-cyan);
-    padding: 8px 16px;
-    border-radius: 50px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    border: 1px solid rgba(56, 189, 248, 0.3);
+    color: #38BDF8;
+    transform: translateX(5px);
 }
 
-.text-gradient {
-    background: linear-gradient(90deg, #38BDF8, #6366F1);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.hero-title {
-    line-height: 1.2;
-}
-
-.hero-description {
-    max-width: 500px;
-}
-
-/* --- Buttons --- */
+/* =========================================
+   BUTTONS
+   ========================================= */
 .btn-primary-gradient {
     background: linear-gradient(90deg, #38BDF8, #6366F1);
     border: none;
@@ -141,6 +83,7 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
     transition: transform 0.3s, box-shadow 0.3s;
 }
+
 .btn-primary-gradient:hover {
     transform: translateY(-3px);
     color: white;
@@ -152,30 +95,168 @@ h1, h2, h3, h4, h5, h6 {
     border: 1px solid rgba(255, 255, 255, 0.2);
     color: white;
     font-weight: 600;
-    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     transition: 0.3s;
 }
+
 .btn-glass:hover {
     background: rgba(255, 255, 255, 0.15);
     color: white;
     border-color: rgba(255, 255, 255, 0.4);
 }
 
-/* --- Right Content (Glass Card) --- */
+.small-btn { font-size: 0.9rem; padding: 8px 24px; }
+
+/* =========================================
+   AUTH PAGES (LOGIN & REGISTER)
+   ========================================= */
+/* Body Override for Auth Pages */
+body.auth-page {
+    background: radial-gradient(circle at top left, #1e293b, #0f172a);
+    background-color: #0f172a;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* Lamp & Light Effects */
+.lamp-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    z-index: 5;
+    margin-top: -50px;
+    pointer-events: none;
+}
+
+.lamp-img {
+    max-width: 600px;
+    width: 100%;
+    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.5));
+    transition: opacity 0.5s ease;
+}
+
+.light-glow {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(255, 220, 100, 0.15) 0%, rgba(255, 220, 100, 0) 70%);
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
+
+/* Form Centering */
+.auth-form-container {
+    position: absolute;
+    top: 30%; 
+    z-index: 10;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+/* Glass Form Box */
+.glass-form {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 2.5rem;
+    width: 400px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    text-align: center;
+}
+
+/* Light Switch (Top Right) */
+.switch-wrapper {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.switch-label {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+/* Auth States */
+body.lights-on .light-glow { opacity: 1; }
+body.lights-on .glass-form { opacity: 1; transform: translateY(0); }
+body:not(.lights-on) .lamp-img { filter: brightness(0.3) grayscale(0.8); }
+
+/* Logo Link */
+.logo-link { text-decoration: none; display: inline-block; transition: 0.3s; }
+.logo-link:hover { opacity: 0.9; transform: scale(1.02); }
+
+/* =========================================
+   HERO SECTION
+   ========================================= */
+.hero-section {
+    min-height: 90vh;
+    position: relative;
+    padding: 80px 0;
+    overflow: hidden;
+    background: radial-gradient(circle at top left, #1e293b, #0f172a);
+    display: flex;
+    align-items: center;
+}
+
+.blur-circle {
+    position: absolute;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    filter: blur(100px);
+    z-index: 1;
+    opacity: 0.5;
+}
+.blur-blue { top: 10%; right: 20%; background: rgba(56, 189, 248, 0.3); }
+.blur-green { bottom: 10%; left: 10%; background: rgba(34, 197, 94, 0.2); }
+
+.text-gradient {
+    background: linear-gradient(90deg, #38BDF8, #6366F1);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.text-accent { color: var(--accent-cyan); }
+
+/* =========================================
+   GLASS CARDS & PRODUCTS
+   ========================================= */
 .glass-card {
     background: rgba(255, 255, 255, 0.07);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 30px;
-    -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
     transition: transform 0.3s;
 }
-
-.glass-card:hover {
-    transform: translateY(-5px); /* Subtle floating effect on hover */
-}
+.glass-card:hover { transform: translateY(-5px); }
 
 .product-mini-card {
     background: rgba(255, 255, 255, 0.05);
@@ -183,6 +264,13 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: 20px;
     transition: 0.3s;
     cursor: pointer;
+    aspect-ratio: 1/1;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+}
+.product-mini-card img {
+    width: 100%; height: 100%;
+    object-fit: cover; transition: 0.5s; border-radius: 10px;
 }
 .product-mini-card:hover {
     background: rgba(255, 255, 255, 0.1);
@@ -200,159 +288,195 @@ h1, h2, h3, h4, h5, h6 {
     z-index: 3;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
-.badge-free-shipping {
-    top: -15px;
-    left: -15px;
-    background: #22C55E;
-    transform: rotate(-5deg);
-}
-.badge-discount {
-    top: -15px;
-    right: -15px;
-    background: #F97316;
-    transform: rotate(5deg);
-}
+.badge-free-shipping { top: -15px; left: -15px; background: #22C55E; transform: rotate(-5deg); }
+.badge-discount { top: -15px; right: -15px; background: #F97316; transform: rotate(5deg); }
 
-/* Floating Action Button (Bag) */
 .floating-icon-btn {
     position: absolute;
-    bottom: -25px;
-    right: -25px;
-    width: 70px;
-    height: 70px;
+    bottom: -25px; right: -25px;
+    width: 70px; height: 70px;
     border-radius: 50%;
     background: linear-gradient(135deg, #38BDF8, #6366F1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
     box-shadow: 0 10px 30px rgba(99, 102, 241, 0.5);
-    cursor: pointer;
-    transition: 0.3s;
+    cursor: pointer; transition: 0.3s;
 }
-.floating-icon-btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 15px 40px rgba(99, 102, 241, 0.7);
-}
+.floating-icon-btn:hover { transform: scale(1.1); }
 
-/* --- Features Row (Bottom) --- */
+/* =========================================
+   FEATURES & CATEGORIES
+   ========================================= */
 .feature-card {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.05);
     transition: 0.3s;
-    cursor: default;
 }
 .feature-card:hover {
     background: rgba(255, 255, 255, 0.08);
     transform: translateY(-5px);
     border-color: rgba(255, 255, 255, 0.2);
 }
-
 .icon-box {
-    width: 50px;
-    height: 50px;
+    width: 50px; height: 50px;
     border-radius: 12px;
     background: rgba(56, 189, 248, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
     color: var(--accent-cyan);
     font-size: 1.5rem;
 }
 
-/* --- Categories Section --- */
-.category-card {
-    height: 250px;
-    cursor: pointer;
-}
-.category-card img {
-    height: 100%;
-    object-fit: cover;
-    transition: 0.5s;
-}
+.category-card { height: 250px; cursor: pointer; border-radius: 20px; overflow: hidden; position: relative; }
+.category-card img { height: 100%; width: 100%; object-fit: cover; transition: 0.5s; }
 .category-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    top: 0;
+    position: absolute; inset: 0;
     background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-    opacity: 0.9;
-    transition: 0.3s;
+    opacity: 0.9; transition: 0.3s;
 }
-.category-card:hover img {
-    transform: scale(1.1);
+.category-card:hover img { transform: scale(1.1); }
+
+/* =========================================
+   CONTACT & FORMS (Global)
+   ========================================= */
+.form-control, .form-select, textarea {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
 }
-
-/* --- Product Mini Cards (Glass Card Grid) --- */
-.product-mini-card {
-    background: rgba(255, 255, 255, 0.1); /* Thoda transparent background */
-    border-radius: 20px;
-    overflow: hidden; /* Image corner round rahein */
-    aspect-ratio: 1/1; /* Card humesha square rahega */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: 0.3s;
-}
-
-.product-mini-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Image poora space legi bina stretch hue */
-    transition: 0.5s;
-}
-
-.product-mini-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
-
-
-/* --- Contact Section --- */
-.icon-box-sm {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    background: rgba(56, 189, 248, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--accent-cyan);
-    font-size: 1.2rem;
-}
-
-/* Form Inputs */
 .form-control:focus {
-    background-color: rgba(255,255,255,0.05);
-    border-color: var(--accent-cyan);
-    color: white;
-    box-shadow: none;
+    border-color: var(--accent-cyan) !important;
+    box-shadow: 0 0 0 0.25rem rgba(56, 189, 248, 0.25);
 }
-.form-floating label {
-    color: rgba(255,255,255,0.5);
-}
-.border-light-subtle {
-    border-color: rgba(255,255,255,0.1) !important;
-}
+.form-floating label { color: rgba(255, 255, 255, 0.5); }
 
-/* --- Auth Pages (Login/Register) --- */
-.auth-container {
+/* =========================================
+   FOOTER
+   ========================================= */
+.bg-dark-surface { background-color: var(--dark-surface); }
+
+/* =========================================
+   CART PAGE STYLES
+   ========================================= */
+.cart-page {
+    background: radial-gradient(circle at top right, #1e293b, #0f172a);
     min-height: 100vh;
-    width: 100%;
-    background: radial-gradient(circle at center, #1e293b, #0f172a);
-    position: relative;
-    overflow: hidden;
 }
 
-.auth-card {
-    width: 100%;
-    max-width: 450px;
+.glass-table {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
     border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cart-img {
+    width: 80px; height: 80px;
+    object-fit: cover; border-radius: 10px;
+}
+
+.btn-qty {
+    background: rgba(255, 255, 255, 0.1);
+    color: white; border: none;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: 0.3s;
+}
+
+.btn-qty:hover { background: var(--accent-cyan); color: #0f172a; }
+
+.summary-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    position: sticky; top: 100px;
+}
+
+/* =========================================
+   SHOP PAGE STYLES
+   ========================================= */
+.product-card {
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    display: flex; flex-direction: column;
+}
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border-color: rgba(56, 189, 248, 0.5);
+}
+.product-img-wrapper {
+    position: relative; padding-top: 100%; overflow: hidden;
+}
+.product-img {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    object-fit: cover; transition: transform 0.5s ease;
+}
+.product-card:hover .product-img { transform: scale(1.05); }
+.card-body { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
+.product-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff; }
+.product-price { font-size: 1.2rem; font-weight: 700; color: #38BDF8; margin-bottom: 1rem; }
+.btn-add-cart {
+    margin-top: auto;
+    background: linear-gradient(90deg, #38BDF8, #6366F1);
+    border: none; color: white;
+    width: 100%; padding: 10px;
+    border-radius: 8px; font-weight: 500;
+    transition: opacity 0.3s;
+}
+.btn-add-cart:hover { opacity: 0.9; color: white; }
+
+/* =========================================
+   FORM VALIDATION & DARK INPUTS OVERRIDES
+   ========================================= */
+
+/* 1. Input Fields Styling (Dark Mode) */
+.form-control-dark {
+    background-color: rgba(15, 23, 42, 0.6) !important; /* Dark Blue-ish Translucent */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #F8FAFC !important; /* White Text */
+    transition: all 0.3s ease;
+}
+
+/* 2. Focus State (Remove Blue Glow, Add Cyan Glow) */
+.form-control-dark:focus {
+    background-color: rgba(15, 23, 42, 0.8) !important;
+    border-color: var(--accent-cyan) !important;
+    box-shadow: 0 0 0 0.25rem rgba(56, 189, 248, 0.2); /* Cyan Glow */
+    color: white !important;
+}
+
+/* 3. Validation Styling (Error State) */
+.was-validated .form-control:invalid,
+.form-control.is-invalid {
+    border-color: #ef4444 !important; /* Red Border */
+    background-image: none !important; /* Remove Bootstrap Default Icon if needed */
+}
+
+.was-validated .form-control:invalid:focus,
+.form-control.is-invalid:focus {
+    box-shadow: 0 0 0 0.25rem rgba(239, 68, 68, 0.25); /* Red Glow */
+}
+
+/* 4. Error Text Message */
+.invalid-feedback {
+    font-size: 0.85rem;
+    color: #ef4444; /* Bright Red for visibility on dark bg */
+    margin-top: 5px;
+}
+
+/* 5. Modal Dark Theme Override */
+.modal-glass-content {
+    background: rgba(30, 41, 59, 0.95) !important; /* Solid Dark Background */
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
-/* Checkbox Style */
-.form-check-input:checked {
-    background-color: var(--accent-cyan);
-    border-color: var(--accent-cyan);
-}
+.modal-header { border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+.modal-footer { border-top: 1px solid rgba(255, 255, 255, 0.1); }

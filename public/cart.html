@@ -1,129 +1,280 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Cart - ShopEase</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="bg-dark-surface">
 
-    <div class="container py-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="text-white fw-bold">Shopping Cart</h2>
-            <a href="index.html" class="btn btn-link text-accent text-decoration-none">Continue Shopping</a>
+<body class="cart-page">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark custom-navbar fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-3" href="index.html">Shop<span class="text-accent">Ease</span></a>
+            <div class="d-flex gap-3">
+                <a href="shop.html" class="btn btn-sm btn-glass rounded-pill">Continue Shopping</a>
+                <div id="user-menu"></div>
+            </div>
         </div>
+    </nav>
 
-        <div class="row g-4">
-            <!-- Cart Items -->
-            <div class="col-lg-8">
-                <div class="glass-card p-4" id="cartContainer">
-                    <!-- Items will be injected here -->
-                    <div class="text-center text-white-50">Loading cart...</div>
+    <!-- Cart Section -->
+    <section class="py-5 mt-5">
+        <div class="container pt-5">
+            <h2 class="text-white mb-4 fw-bold">Your Shopping Cart</h2>
+
+            <div class="row g-4">
+                <!-- Cart Items List -->
+                <div class="col-lg-8">
+                    <div class="glass-table p-3">
+                        <div class="table-responsive">
+                            <table class="table table-dark table-hover align-middle mb-0 bg-transparent">
+                                <thead>
+                                    <tr class="text-white-50 small">
+                                        <th>Product</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Total</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cartItemsContainer">
+                                    <tr>
+                                        <td colspan="5" class="text-center py-5 text-white-50">
+                                            <div class="spinner-border text-primary" role="status"></div>
+                                            <span class="ms-2">Loading cart...</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="col-lg-4">
+                    <div class="summary-card p-4">
+                        <h4 class="text-white mb-4">Order Summary</h4>
+                        <div class="d-flex justify-content-between text-white-50 mb-2">
+                            <span>Subtotal</span>
+                            <span id="summarySubtotal">₹0</span>
+                        </div>
+                        <div class="d-flex justify-content-between text-white-50 mb-3">
+                            <span>Shipping</span>
+                            <span class="text-success">Free</span>
+                        </div>
+                        <hr class="border-secondary">
+                        <div class="d-flex justify-content-between text-white fs-5 fw-bold mb-4">
+                            <span>Total</span>
+                            <span id="summaryTotal">₹0</span>
+                        </div>
+                        <button class="btn btn-primary-gradient w-100 py-3 rounded-pill fw-bold" onclick="openCheckoutModal()">
+                            Proceed to Checkout
+                        </button>
+                    </div>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <!-- Summary -->
-            <div class="col-lg-4">
-                <div class="glass-card p-4">
-                    <h4 class="text-white mb-4">Order Summary</h4>
-                    <div class="d-flex justify-content-between text-white-50 mb-3">
-                        <span>Subtotal</span>
-                        <span id="subtotal">$0.00</span>
-                    </div>
-                    <div class="d-flex justify-content-between text-white-50 mb-3">
-                        <span>Shipping</span>
-                        <span class="text-success">Free</span>
-                    </div>
-                    <hr class="border-secondary">
-                    <div class="d-flex justify-content-between text-white fs-5 fw-bold mb-4">
-                        <span>Total</span>
-                        <span id="grandTotal">$0.00</span>
-                    </div>
-                    <button class="btn btn-primary-gradient w-100 py-3 rounded-pill" id="checkoutBtn">
-                        Proceed to Checkout
-                    </button>
+    <!-- Checkout Modal (Dark Theme & Validation) -->
+    <div class="modal fade" id="checkoutModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal-glass-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold text-white">Checkout Details</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Note: 'novalidate' disables browser default tooltip -->
+                    <form id="checkoutForm" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label text-white-50">Full Name</label>
+                            <!-- Added 'form-control-dark' class -->
+                            <input type="text" class="form-control form-control-dark" id="orderName" required>
+                            <div class="invalid-feedback">Please enter your full name.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-white-50">Phone Number</label>
+                            <input type="tel" class="form-control form-control-dark" id="orderPhone" required pattern="[0-9]{10}">
+                            <div class="invalid-feedback">Please enter a valid 10-digit phone number.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-white-50">Shipping Address</label>
+                            <textarea class="form-control form-control-dark" id="orderAddress" rows="3" required></textarea>
+                            <div class="invalid-feedback">Shipping address is required.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-white-50">Landmark (Optional)</label>
+                            <input type="text" class="form-control form-control-dark" id="orderLandmark">
+                        </div>
+
+                        <div class="p-3 rounded bg-success bg-opacity-10 border border-success mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" checked disabled>
+                                <label class="form-check-label fw-bold text-success">
+                                    Cash on Delivery (COD)
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between fw-bold fs-5 mt-4 text-white">
+                            <span>Total Payable:</span>
+                            <span id="modalTotalAmount">₹0</span>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-glass text-white-50" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary-gradient px-4" onclick="validateAndPlaceOrder()">Confirm Order</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
-        document.addEventListener('DOMContentLoaded', loadCart);
+        const API_URL = 'http://localhost:5000';
+        let cartData = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCart();
+            checkAuth();
+        });
 
         async function loadCart() {
             const token = localStorage.getItem('token');
-            if(!token) { window.location.href = 'login.html'; return; }
+            if (!token) return window.location.href = 'login.html';
 
             try {
-                const res = await fetch('http://localhost:5000/api/cart', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                
-                const cart = await res.json();
-                const container = document.getElementById('cartContainer');
-                
-                if (!cart || !cart.items || cart.items.length === 0) {
-                    container.innerHTML = '<div class="text-center text-white-50 py-5">Your cart is empty.</div>';
+                const res = await fetch(`${API_URL}/cart`, { headers: { 'Authorization': `Bearer ${token}` } });
+                const data = await res.json();
+
+                if (!data || !data.products || data.products.length === 0) {
+                    document.getElementById('cartItemsContainer').innerHTML = `<tr><td colspan="5" class="text-center py-5 text-white-50">Your cart is empty. <a href="shop.html" class="text-accent">Go Shop</a></td></tr>`;
                     updateSummary(0);
+                    cartData = [];
                     return;
                 }
-
-                let html = '';
-                let total = 0;
-
-                cart.items.forEach(item => {
-                    const product = item.productId; 
-                    // Note: Ensure backend populates productId details
-                    
-                    if(!product) return;
-
-                    const itemTotal = product.price * item.quantity;
-                    total += itemTotal;
-
-                    html += `
-                        <div class="d-flex align-items-center gap-3 mb-4 border-bottom border-secondary border-opacity-25 pb-4">
-                            <img src="${product.image || 'https://via.placeholder.com/100'}" class="rounded-3" style="width: 80px; height: 80px; object-fit: cover;">
-                            <div class="flex-grow-1">
-                                <h5 class="text-white mb-1">${product.name}</h5>
-                                <p class="text-accent mb-0">$${product.price}</p>
-                            </div>
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="text-white fw-bold">x${item.quantity}</span>
-                            </div>
-                            <div class="text-end">
-                                <h6 class="text-white mb-2">$${itemTotal}</h6>
-                                <button class="btn btn-sm text-danger p-0" onclick="removeItem('${product._id}')">Remove</button>
-                            </div>
-                        </div>
-                    `;
-                });
-
-                container.innerHTML = html;
-                updateSummary(total);
-
+                cartData = data.products;
+                renderCartItems(data.products);
             } catch (error) {
-                console.error(error);
-                document.getElementById('cartContainer').innerHTML = '<div class="text-danger">Error loading cart.</div>';
+                console.error("Cart Error:", error);
             }
         }
 
-        function updateSummary(total) {
-            document.getElementById('subtotal').innerText = '$' + total.toFixed(2);
-            document.getElementById('grandTotal').innerText = '$' + total.toFixed(2);
+        function renderCartItems(products) {
+            const container = document.getElementById('cartItemsContainer');
+            let html = '';
+            let total = 0;
+            products.forEach(item => {
+                const product = item.product;
+                if (!product) return;
+                const lineTotal = product.price * item.quantity;
+                total += lineTotal;
+                html += `
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center gap-3">
+                                <img src="${product.image || 'https://via.placeholder.com/80'}" class="cart-img">
+                                <div>
+                                    <h6 class="mb-0 text-white">${product.title}</h6>
+                                    <small class="text-white-50">Category: ${product.category || 'General'}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-white">₹${product.price}</td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <button class="btn-qty" onclick="updateQty('${product._id}', ${item.quantity - 1})">-</button>
+                                <span class="text-white fw-bold mx-1">${item.quantity}</span>
+                                <button class="btn-qty" onclick="updateQty('${product._id}', ${item.quantity + 1})">+</button>
+                            </div>
+                        </td>
+                        <td class="text-accent fw-bold">₹${lineTotal}</td>
+                        <td><button class="btn btn-link text-danger p-0" onclick="removeItem('${product._id}')"><i class="bi bi-trash fs-5"></i></button></td>
+                    </tr>`;
+            });
+            container.innerHTML = html;
+            updateSummary(total);
         }
 
-        async function removeItem(id) {
-            // Add remove logic here (API Call to delete item)
-            alert("Remove feature logic needed in backend");
+        function updateSummary(total) {
+            document.getElementById('summarySubtotal').textContent = `₹${total}`;
+            document.getElementById('summaryTotal').textContent = `₹${total}`;
+            document.getElementById('modalTotalAmount').textContent = `₹${total}`;
         }
-        
-        document.getElementById('checkoutBtn').addEventListener('click', () => {
-            alert("Integrating Payment Gateway...");
-            // Here you would redirect to Payment Page
-        });
+
+        async function updateQty(productId, newQty) {
+            if (newQty < 1) return;
+            const token = localStorage.getItem('token');
+            await fetch(`${API_URL}/cart/add`, { 
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, 
+                body: JSON.stringify({ productId, quantity: 1 }) 
+            });
+            loadCart();
+        }
+
+        async function removeItem(productId) {
+            if (!confirm("Remove item?")) return;
+            const token = localStorage.getItem('token');
+            await fetch(`${API_URL}/cart/remove/${productId}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+            loadCart();
+        }
+
+        function openCheckoutModal() {
+            if (cartData.length === 0) return alert("Cart is empty!");
+            const form = document.getElementById('checkoutForm');
+            form.classList.remove('was-validated'); // Reset errors
+            form.reset(); 
+            new bootstrap.Modal(document.getElementById('checkoutModal')).show();
+        }
+
+        // Validation Logic
+        function validateAndPlaceOrder() {
+            const form = document.getElementById('checkoutForm');
+            if (!form.checkValidity()) {
+                form.classList.add('was-validated'); // Shows red borders & messages defined in CSS
+                return;
+            }
+            placeOrder();
+        }
+
+        async function placeOrder() {
+            const name = document.getElementById('orderName').value;
+            const phone = document.getElementById('orderPhone').value;
+            const address = document.getElementById('orderAddress').value;
+            const token = localStorage.getItem('token');
+
+            try {
+                const res = await fetch(`${API_URL}/orders/place`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ shippingAddress: { name, phone, address }, paymentMethod: 'COD' })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    alert("🎉 Order Placed Successfully!");
+                    bootstrap.Modal.getInstance(document.getElementById('checkoutModal')).hide();
+                    window.location.href = 'user/dashboard.html';
+                } else {
+                    alert("Failed: " + (data.message || "Error"));
+                }
+            } catch (error) { console.error(error); alert("Server Error"); }
+        }
+
+        function checkAuth() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user) document.getElementById('user-menu').innerHTML = `<span class="text-white align-self-center">Hi, ${user.name}</span>`;
+        }
     </script>
 </body>
 </html>

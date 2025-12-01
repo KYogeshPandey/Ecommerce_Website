@@ -8,7 +8,15 @@ const {
     deleteProduct,
 } = require('../controllers/productController');
 const { protect } = require('../middleware/auth');
-const { admin } = require('../middleware/admin');
+
+// Agar alag se admin middleware file nahi hai, toh yahan define kar sakte hain
+const admin = (req, res, next) => {
+    if (req.user && req.user.role === 'seller') { // Assuming 'seller' is the admin role
+        next();
+    } else {
+        res.status(401).json({ message: 'Not authorized as an admin' });
+    }
+};
 
 router.route('/').get(getProducts).post(protect, admin, createProduct);
 router

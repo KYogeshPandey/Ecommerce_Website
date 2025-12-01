@@ -6,26 +6,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const switchBtn = document.getElementById('lightSwitch');
     const body = document.body;
 
-    // Auto-on effect
-    setTimeout(() => {
-        if (switchBtn && !switchBtn.checked) {
-            switchBtn.checked = true;
-            body.classList.add('lights-on');
-        }
-    }, 500);
+    // ⚡ DEFAULT STATE: Lights OFF
+    // Page load hone par switch OFF rahega aur 'lights-on' class nahi hogi.
+    if (switchBtn) {
+        switchBtn.checked = false; // Switch visually OFF
+        body.classList.remove('lights-on'); // Lights OFF
+    }
 
+    // Toggle Logic
     if (switchBtn) {
         switchBtn.addEventListener('change', function () {
-            if (this.checked) {
-                body.classList.add('lights-on');
-            } else {
-                body.classList.remove('lights-on');
-            }
+            // Switch change hone par lights toggle hongi
+            body.classList.toggle('lights-on', this.checked);
         });
     }
 
-    // --- 2. Login Form Logic ---
-    const loginForm = document.getElementById('loginForm'); // ID matches HTML
+    // --- 2. Login Form Logic (Same as before) ---
+    const loginForm = document.getElementById('loginForm');
 
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
@@ -36,16 +33,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const btn = loginForm.querySelector('button[type="submit"]');
             const originalText = btn.innerText;
 
-            // Loading State
             btn.innerText = 'Logging in...';
             btn.disabled = true;
 
             try {
                 const res = await fetch('http://localhost:5000/auth/login', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
                 });
 
@@ -53,24 +47,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (res.ok) {
                     localStorage.setItem('token', data.token);
-                    // Backend returns user data directly (not nested)
-                    localStorage.setItem('user', JSON.stringify(data));
+                    // User data ko localStorage mein save
+                    const user = { _id: data._id, name: data.name, email: data.email, role: data.role };
+                    localStorage.setItem('user', JSON.stringify(user));
 
                     btn.innerText = 'Success!';
-                    btn.classList.remove('btn-primary-gradient');
-                    btn.classList.add('btn-success'); // Bootstrap success color
+                    btn.classList.replace('btn-primary-gradient', 'btn-success');
 
                     setTimeout(() => {
-                        // Role-based redirection
-                        if (data.role === 'seller') {
-                            window.location.href = '/admin/dashboard.html';
-                        } else if (data.role === 'buyer') {
-                            window.location.href = '/user/dashboard.html';
+                        // Backend se redirect URL
+                        if (data.redirectUrl) {
+                            window.location.href = data.redirectUrl;
                         } else {
-                            // Fallback for any other role
-                            window.location.href = 'index.html';
+                            window.location.href = '/index.html';
                         }
                     }, 1000);
+
                 } else {
                     alert(data.message || 'Login Failed');
                     btn.innerText = originalText;
