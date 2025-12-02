@@ -16,22 +16,41 @@ function checkAuth() {
     if (!authContainer) return;
 
     if (token && user.name) {
+        // Decide Links based on Role
+        let dashboardLink = '';
+        
+        if (user.role === 'admin') {
+            // Admin gets both Admin Panel & User View
+            dashboardLink = `
+                <li><a class="dropdown-item text-white-50" href="/admin/dashboard.html"><i class="bi bi-speedometer2 me-2"></i> Admin Panel</a></li>
+                <li><a class="dropdown-item text-white-50" href="/user/dashboard.html"><i class="bi bi-person me-2"></i> My Account</a></li>
+            `;
+        } else {
+            // Normal User gets only My Account
+            dashboardLink = `
+                <li><a class="dropdown-item text-white-50" href="/user/dashboard.html"><i class="bi bi-grid me-2"></i> My Dashboard</a></li>
+                <li><a class="dropdown-item text-white-50" href="/user/dashboard.html"><i class="bi bi-bag-check me-2"></i> My Orders</a></li>
+            `;
+        }
+
         // User Logged In View
         authContainer.innerHTML = `
             <div class="dropdown">
-                <button class="btn btn-link text-white text-decoration-none dropdown-toggle fw-semibold" type="button" data-bs-toggle="dropdown">
-                    Hi, ${user.name}
+                <button class="btn btn-link text-white text-decoration-none dropdown-toggle fw-semibold d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                    <div class="avatar-circle-xs bg-accent text-dark d-flex align-items-center justify-content-center rounded-circle" style="width: 30px; height: 30px; font-size: 14px;">
+                        ${user.name.charAt(0).toUpperCase()}
+                    </div>
+                    <span class="d-none d-md-inline">Hi, ${user.name.split(' ')[0]}</span>
                 </button>
-                <ul class="dropdown-menu dropdown-menu-end bg-dark border-secondary shadow">
-                    ${user.role === 'admin' ? '<li><a class="dropdown-item text-white-50" href="/admin/dashboard.html">Admin Dashboard</a></li>' : ''}
-                    <li><a class="dropdown-item text-white-50" href="user/dashboard.html">Dashboard</a></li>
-                    <li><hr class="dropdown-divider bg-secondary"></li>
-                    <li><a class="dropdown-item text-white-50" href="#" id="logoutBtn">Logout</a></li>
+                <ul class="dropdown-menu dropdown-menu-end glass-dropdown shadow border-secondary mt-2">
+                    ${dashboardLink}
+                    <li><hr class="dropdown-divider bg-secondary opacity-25"></li>
+                    <li><a class="dropdown-item text-danger" href="#" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
                 </ul>
             </div>
-            <a href="cart.html" class="position-relative btn btn-glass rounded-circle p-0 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+            <a href="cart.html" class="position-relative btn btn-glass rounded-circle p-0 d-flex align-items-center justify-content-center ms-2" style="width: 40px; height: 40px;">
                 <i class="bi bi-bag text-white fs-5"></i>
-                <span id="cart-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-accent" style="font-size: 0.6rem; display: none;">
+                <span id="cart-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-accent border border-dark" style="font-size: 0.6rem; display: none;">
                     0
                 </span>
             </a>
@@ -42,7 +61,7 @@ function checkAuth() {
             e.preventDefault();
             localStorage.removeItem('token');
             localStorage.removeItem('user');
-            window.location.href = 'login.html';
+            window.location.href = '/login.html'; // Corrected Path with slash
         });
 
     } else {

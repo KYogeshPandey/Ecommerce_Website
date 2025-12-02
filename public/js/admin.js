@@ -1,26 +1,25 @@
 const API_URL = 'http://localhost:5000';
 
-// --- Main Initialization ---
+// --- Initialization ---
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Pehle Auth Check karo
     if (!checkAdminAuth()) return;
 
-    // 2. Page ke hisab se data load karo
-    if (document.getElementById('total-products')) {
+    const path = window.location.pathname;
+
+    // Dashboard Page Logic
+    if (path.includes('dashboard.html')) {
         loadDashboardStats();
+    } 
+    
+    // Products Page Logic
+    else if (path.includes('products.html')) {
+        loadProducts();
     }
 
-    if (document.getElementById('admin-products-table')) {
-        loadAdminProducts();
-    }
-
-    if (document.getElementById('admin-orders-list')) {
-        loadAdminOrders();
-    }
-
-    const addForm = document.getElementById('add-product-form');
-    if (addForm) {
-        addForm.addEventListener('submit', handleAddProduct);
+    // Handle Add/Edit Product Form Submission (Used in Modal)
+    const productForm = document.getElementById('productForm');
+    if (productForm) {
+        productForm.addEventListener('submit', handleProductSubmit);
     }
 });
 
@@ -29,60 +28,72 @@ function checkAdminAuth() {
     const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem('user') || '{}');
 
-    // Agar token nahi hai ya user role 'buyer' hai -> Bhagao
     if (!token || !user._id) {
-        alert('Please login first.');
-        window.location.href = '/login.html';
+        window.location.href = '../login.html';
         return false;
     }
 
-    // "Seller" aur "Admin" dono ko allow karo
     if (user.role !== 'seller' && user.role !== 'admin') {
-        alert('⛔ Access Denied! This area is for Sellers only.');
-        window.location.href = '/user/dashboard.html'; // Buyer dashboard pe bhejo
+        alert('⛔ Access Denied! Sellers/Admins only.');
+        window.location.href = '../user/dashboard.html';
         return false;
     }
 
-    // Set Admin Name on Dashboard
-    const adminNameEl = document.getElementById('admin-name');
-    if (adminNameEl) adminNameEl.innerText = user.name || 'Seller';
+    // Set Admin Name in Sidebar if element exists
+    const adminNameEl = document.getElementById('adminName');
+    if (adminNameEl) adminNameEl.innerText = user.name;
 
     return true;
 }
 
-// 📊 2. Dashboard Stats (Only runs on Dashboard Page)
+// 📊 2. Load Dashboard Stats (Overview)
 async function loadDashboardStats() {
     const token = localStorage.getItem('token');
-    
+
     try {
-        // Parallel Fetching for Speed
-        const [resProd, resOrd] = await Promise.all([
+        // Fetch Products & Orders in Parallel
+        const [resProducts, resOrders] = await Promise.all([
             fetch(`${API_URL}/products`),
-            fetch(`${API_URL}/orders/admin`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            })
+            fetch(`${API_URL}/orders/admin`, { headers: { 'Authorization': `Bearer ${token}` } })
         ]);
 
-        if (resProd.ok) {
-            const products = await resProd.json();
-            const prodCountEl = document.getElementById('total-products');
-            if (prodCountEl) prodCountEl.innerText = products.length || 0;
+        // Update Product Count
+        if (resProducts.ok) {
+            const products = await resProducts.json();
+            const countEl = document.getElementById('productCount');
+            if (countEl) countEl.innerText = products.length;
         }
 
-        if (resOrd.ok) {
-            const orders = await resOrd.json();
-            const ordCountEl = document.getElementById('total-orders');
-            if (ordCountEl) ordCountEl.innerText = orders.length || 0;
+        // Update Orders Table & Count
+        if (resOrders.ok) {
+            const orders = await resOrders.json();
+            const recentTable = document.getElementById('recentOrdersTable');
+            
+            if (recentTable) {
+                if (orders.length === 0) {
+                    recentTable.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-white-50">No orders yet.</td></tr>';
+                } else {
+                    // Show last 5 orders
+                    recentTable.innerHTML = orders.slice(0, 5).map(order => `
+                        <tr>
+                            <td class="text-white">#${order._id.slice(-6).toUpperCase()}</td>
+                            <td class="text-white-50">${order.userId ? order.userId.name : 'Guest'}</td>
+                            <td><span class="badge bg-success bg-opacity-25 text-success">${order.status || 'Processing'}</span></td>
+                            <td class="text-white fw-bold">₹${order.totalAmount}</td>
+                            <td><button class="btn btn-sm btn-icon-glass text-primary"><i class="bi bi-eye"></i></button></td>
+                        </tr>
+                    `).join('');
+                }
+            }
         }
-
     } catch (error) {
-        console.error('Dashboard Stats Error:', error);
+        console.error('Dashboard Load Error:', error);
     }
 }
 
-// 🛍️ 3. Load Products Table (Manage Products Page)
-async function loadAdminProducts() {
-    const tbody = document.getElementById('admin-products-table');
+// 🛍️ 3. Load Products (Manage Products Page)
+async function loadProducts() {
+    const tbody = document.getElementById('productsTableBody');
     if (!tbody) return;
 
     try {
@@ -90,86 +101,57 @@ async function loadAdminProducts() {
         const products = await res.json();
 
         if (products.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="5" class="text-center">No products found.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center py-5 text-white-50">No products in inventory.</td></tr>';
             return;
         }
 
-        tbody.innerHTML = products.map(product => `
-            <tr class="align-middle">
-                <td><img src="${product.image}" width="50" style="border-radius: 5px;" 
-                    onerror="this.src='https://via.placeholder.com/50'"></td>
-                <td>${product.title}</td>
-                <td>₹${product.price.toLocaleString('en-IN')}</td>
-                <td>${product.stock || 10}</td>
+        tbody.innerHTML = products.map(p => `
+            <tr>
+                <td><img src="${p.image}" width="40" height="40" class="rounded object-fit-cover"></td>
+                <td class="text-white fw-medium">${p.title}</td>
+                <td class="text-white-50">${p.category}</td>
+                <td class="text-accent fw-bold">₹${p.price}</td>
+                <td><span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25">${p.stock} Stock</span></td>
                 <td>
                     <div class="d-flex gap-2">
-                        <button class="btn btn-sm btn-danger" onclick="deleteProduct('${product._id}')">Delete</button>
+                        <button class="btn btn-sm btn-icon-glass text-warning" onclick="openEditModal('${p._id}')">
+                            <i class="bi bi-pencil-fill"></i>
+                        </button>
+                        <button class="btn btn-sm btn-icon-glass text-danger" onclick="deleteProduct('${p._id}')">
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
                     </div>
                 </td>
             </tr>
         `).join('');
-        
+
     } catch (error) {
         console.error('Load Products Error:', error);
-        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Error loading products</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center text-danger">Failed to load data.</td></tr>';
     }
 }
 
-// 📦 4. Load Orders Table (Manage Orders Page)
-async function loadAdminOrders() {
-    const tbody = document.getElementById('admin-orders-list');
-    if (!tbody) return;
-
-    const token = localStorage.getItem('token');
-    try {
-        const res = await fetch(`${API_URL}/orders/admin`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        const orders = await res.json();
-
-        if (orders.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="5" class="text-center">No orders found.</td></tr>';
-            return;
-        }
-
-        tbody.innerHTML = orders.map(order => `
-            <tr class="align-middle">
-                <td>#${order._id.substring(0, 8).toUpperCase()}</td>
-                <td>${order.userId ? order.userId.name : 'Guest'}</td>
-                <td>₹${(order.totalAmount || 0).toLocaleString('en-IN')}</td>
-                <td><span class="badge bg-success">${order.status || 'Completed'}</span></td>
-                <td>${new Date(order.createdAt).toLocaleDateString()}</td>
-            </tr>
-        `).join('');
-
-    } catch (error) {
-        console.error('Load Orders Error:', error);
-        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Error loading orders</td></tr>';
-    }
-}
-
-// ➕ 5. Add Product Logic
-async function handleAddProduct(e) {
+// ➕ 4. Handle Add/Edit Product Submit
+async function handleProductSubmit(e) {
     e.preventDefault();
     const token = localStorage.getItem('token');
-
-    const submitBtn = e.target.querySelector('button[type="submit"]');
-    const originalText = submitBtn.innerText;
-    submitBtn.innerText = 'Adding...';
-    submitBtn.disabled = true;
-
+    const id = document.getElementById('productId').value; // Hidden ID field
+    
     const productData = {
-        title: document.getElementById('title').value,
-        description: document.getElementById('description').value,
-        price: document.getElementById('price').value,
-        category: document.getElementById('category').value,
-        image: document.getElementById('image').value,
-        stock: document.getElementById('stock') ? document.getElementById('stock').value : 10
+        title: document.getElementById('pName').value,
+        price: document.getElementById('pPrice').value,
+        stock: document.getElementById('pStock').value,
+        category: document.getElementById('pCategory').value,
+        image: document.getElementById('pImage').value,
+        description: document.getElementById('pDesc').value,
     };
 
+    const method = id ? 'PUT' : 'POST';
+    const endpoint = id ? `/products/${id}` : '/products';
+
     try {
-        const res = await fetch(`${API_URL}/products`, {
-            method: 'POST',
+        const res = await fetch(`${API_URL}${endpoint}`, {
+            method: method,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -178,24 +160,155 @@ async function handleAddProduct(e) {
         });
 
         if (res.ok) {
-            alert('✅ Product Added Successfully!');
-            window.location.href = '/admin/products.html';
+            alert(id ? 'Product Updated!' : 'Product Added!');
+            // Close Modal Manually
+            const modalEl = document.getElementById('addProductModal');
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            modal.hide();
+            
+            // Refresh List
+            loadProducts();
+            // Reset Form
+            document.getElementById('productForm').reset();
+            document.getElementById('productId').value = '';
+            document.getElementById('modalTitle').innerText = 'Add Product';
         } else {
-            const data = await res.json();
-            alert('Error: ' + (data.message || 'Failed to add product'));
+            alert('Operation Failed');
         }
     } catch (error) {
-        console.error('Add Product Error:', error);
-        alert('Something went wrong');
-    } finally {
-        submitBtn.innerText = originalText;
-        submitBtn.disabled = false;
+        console.error(error);
+        alert('Server Error');
     }
 }
 
-// 🗑️ Delete Product (Global Function)
-window.deleteProduct = async function (id) {
-    if (!confirm('Are you sure you want to delete this product?')) return;
+// ✏️ 5. Pre-fill Modal for Editing
+window.openEditModal = async function(id) {
+    try {
+        const res = await fetch(`${API_URL}/products/${id}`);
+        const p = await res.json();
+
+        // Populate Fields
+        document.getElementById('productId').value = p._id;
+        document.getElementById('pName').value = p.title;
+        document.getElementById('pPrice').value = p.price;
+        document.getElementById('pStock').value = p.stock;
+        document.getElementById('pCategory').value = p.category;
+        document.getElementById('pImage').value = p.image;
+        document.getElementById('pDesc').value = p.description;
+
+        // Change Modal Title
+        document.getElementById('modalTitle').innerText = 'Edit Product';
+
+        // Show Modal
+        const modal = new bootstrap.Modal(document.getElementById('addProductModal'));
+        modal.show();
+
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+// Update Initialization Section:
+document.addEventListener('DOMContentLoaded', () => {
+    if (!checkAdminAuth()) return;
+    const path = window.location.pathname;
+
+    if (path.includes('dashboard.html')) loadDashboardStats();
+    else if (path.includes('products.html')) loadProducts();
+    else if (path.includes('orders.html')) loadOrders(); // NEW LINE
+
+    const productForm = document.getElementById('productForm');
+    if (productForm) productForm.addEventListener('submit', handleProductSubmit);
+});
+
+// ... (loadDashboardStats, loadProducts, handleProductSubmit Logic same as before) ...
+
+// 🆕 NEW: Load Orders Logic
+async function loadOrders() {
+    const tbody = document.getElementById('ordersTableBody');
+    if (!tbody) return;
+    const token = localStorage.getItem('token');
+
+    try {
+        const res = await fetch(`${API_URL}/orders/admin`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const orders = await res.json();
+
+        if (orders.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center py-5 text-white-50">No orders found.</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = orders.map(o => `
+            <tr>
+                <td class="text-white font-monospace">#${o._id.slice(-6).toUpperCase()}</td>
+                <td class="text-white">${o.userId ? o.userId.name : 'Guest'} <br> <small class="text-white-50">${o.shippingAddress?.phone || ''}</small></td>
+                <td class="text-white-50">${new Date(o.createdAt).toLocaleDateString()}</td>
+                <td class="text-accent fw-bold">₹${o.totalAmount}</td>
+                <td>${getStatusBadge(o.status)}</td>
+                <td>
+                    <button class="btn btn-sm btn-icon-glass text-primary" onclick="openStatusModal('${o._id}', '${o.status}')">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+
+    } catch (error) {
+        console.error('Load Orders Error:', error);
+    }
+}
+
+// Helper for Badges
+function getStatusBadge(status) {
+    const colors = {
+        'Processing': 'warning',
+        'Shipped': 'info',
+        'Delivered': 'success',
+        'Cancelled': 'danger'
+    };
+    const color = colors[status] || 'secondary';
+    return `<span class="badge bg-${color} bg-opacity-25 text-${color} border border-${color} border-opacity-25">${status}</span>`;
+}
+
+// 🆕 NEW: Status Update Modal Logic
+window.openStatusModal = function(id, currentStatus) {
+    document.getElementById('statusOrderId').value = id;
+    document.getElementById('orderStatusSelect').value = currentStatus;
+    new bootstrap.Modal(document.getElementById('updateStatusModal')).show();
+};
+
+window.saveOrderStatus = async function() {
+    const id = document.getElementById('statusOrderId').value;
+    const status = document.getElementById('orderStatusSelect').value;
+    const token = localStorage.getItem('token');
+
+    try {
+        const res = await fetch(`${API_URL}/orders/${id}/status`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ status })
+        });
+
+        if (res.ok) {
+            alert('Order Status Updated!');
+            bootstrap.Modal.getInstance(document.getElementById('updateStatusModal')).hide();
+            loadOrders(); // Refresh Table
+        } else {
+            alert('Update Failed');
+        }
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+// 🗑️ 6. Delete Product
+window.deleteProduct = async function(id) {
+    if (!confirm('Delete this product permanently?')) return;
     const token = localStorage.getItem('token');
 
     try {
@@ -205,18 +318,18 @@ window.deleteProduct = async function (id) {
         });
 
         if (res.ok) {
-            // Agar hum products page par hain to list refresh karo
-            if (document.getElementById('admin-products-table')) {
-                loadAdminProducts();
-            } else {
-                // Agar dashboard par hain to reload karo ya stats update karo
-                window.location.reload();
-            }
+            loadProducts();
         } else {
-            alert('Failed to delete product');
+            alert('Delete Failed');
         }
     } catch (error) {
-        console.error('Delete Error:', error);
-        alert('Server Error');
+        console.error(error);
     }
+};
+
+// 🚪 7. Logout Logic
+window.logout = function() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    window.location.href = '../login.html';
 };

@@ -480,3 +480,175 @@ body:not(.lights-on) .lamp-img { filter: brightness(0.3) grayscale(0.8); }
 
 .modal-header { border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
 .modal-footer { border-top: 1px solid rgba(255, 255, 255, 0.1); }
+
+/* Admin Layout */
+.main-content-wrapper {
+    margin-left: 0;
+    transition: 0.3s;
+    width: 100%;
+}
+
+@media (min-width: 992px) {
+    .main-content-wrapper { margin-left: 280px; width: calc(100% - 280px); }
+    .glass-sidebar { transform: none; visibility: visible; }
+}
+
+/* =========================================
+   ADMIN DASHBOARD LAYOUT
+   ========================================= */
+
+/* Sidebar Styling */
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    padding: 48px 0 0;
+    box-shadow: inset -1px 0 0 rgba(255, 255, 255, .1);
+    width: 240px;
+    background: rgba(15, 23, 42, 0.95); /* Dark background matching theme */
+    backdrop-filter: blur(16px);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sidebar .nav-link {
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    padding: 12px 24px;
+    margin: 4px 16px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sidebar .nav-link:hover, 
+.sidebar .nav-link.active {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px);
+}
+
+.sidebar .nav-link.text-danger:hover {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+.sidebar-heading {
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* Navbar Styling for Admin */
+.navbar-dark.glass-header {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    height: 70px;
+    padding: 0;
+}
+
+.navbar-brand {
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    font-size: 1.3rem;
+    background-color: rgba(0, 0, 0, 0.2);
+    box-shadow: inset -1px 0 0 rgba(255, 255, 255, .1);
+    width: 240px; /* Matches sidebar width */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+/* Main Content Area Adjustment */
+main.col-md-9, 
+main.col-lg-10 {
+    margin-left: auto; /* Let Bootstrap grid handle offset */
+    padding-top: 90px; /* Clear header */
+    padding-bottom: 40px;
+    min-height: 100vh;
+}
+
+/* Avatar Small Circle */
+.avatar-circle-sm {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 767.98px) {
+    .sidebar {
+        top: 70px; /* Below Navbar */
+        width: 100%;
+        height: auto;
+        position: fixed;
+        background: rgba(15, 23, 42, 0.98);
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .navbar-brand {
+        width: auto;
+        background: transparent;
+        box-shadow: none;
+        padding-left: 20px;
+        justify-content: flex-start;
+    }
+    
+    main {
+        margin-left: 0 !important;
+        padding-top: 80px;
+    }
+}
+
+/* --- Fix for Blurry/Faded Icons on Dashboard Cards --- */
+.icon-box {
+    opacity: 1 !important; /* Force visibility */
+    background-color: rgba(56, 189, 248, 0.15) !important; /* Bright Cyan Tint */
+    color: #38BDF8 !important; /* Bright Cyan Text */
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.4); /* Glow Effect */
+}
+
+/* Specific Colors for specific cards to pop */
+.icon-box.text-success {
+    background-color: rgba(34, 197, 94, 0.15) !important;
+    color: #22C55E !important;
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+}
+.icon-box.text-warning {
+    background-color: rgba(234, 179, 8, 0.15) !important;
+    color: #EAB308 !important;
+    box-shadow: 0 0 15px rgba(234, 179, 8, 0.4);
+}
+
+/* --- Fix for Profile Avatar (Make it pop blue) --- */
+.avatar-circle-sm {
+    background-color: #2563EB !important; /* Solid Royal Blue */
+    color: white !important;
+    font-weight: 700;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 10px rgba(37, 99, 235, 0.6); /* Blue Glow */
+}
+
+/* --- Role Badge in Navbar (Center) --- */
+.navbar-role-badge {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 5px 15px;
+    border-radius: 20px;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}

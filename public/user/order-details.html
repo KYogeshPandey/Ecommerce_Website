@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details - ShopEase</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="dashboard-page">
+
+    <!-- Fixed Header for Details Page -->
+    <header class="navbar navbar-dark sticky-top p-0 shadow glass-header">
+        <div class="container-fluid">
+            <a href="dashboard.html" class="btn btn-icon-glass text-white me-3">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+            <span class="navbar-brand mb-0 h1 fw-bold">Order Details</span>
+        </div>
+    </header>
+
+    <div class="container pt-4 pb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Order Info Card -->
+                <div class="glass-card p-4 mb-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h5 class="text-white mb-1">Order <span class="text-accent font-monospace" id="orderId">#Loading...</span></h5>
+                            <p class="text-white-50 small mb-0"><i class="bi bi-calendar3 me-2"></i> <span id="orderDate">...</span></p>
+                        </div>
+                        <span class="badge bg-secondary fs-6 px-3 py-2 rounded-pill" id="orderStatus">Loading...</span>
+                    </div>
+                    <div class="bg-white bg-opacity-10 p-3 rounded-3 mt-3">
+                        <h6 class="text-white mb-2 small text-uppercase letter-spacing-1">Shipping Address</h6>
+                        <p class="text-white-50 mb-0 small" id="shippingAddress">...</p>
+                    </div>
+                </div>
+
+                <!-- Order Items -->
+                <div class="glass-table p-4 mb-4">
+                    <h6 class="text-white mb-3 ps-2 border-start border-4 border-accent">&nbsp; Items Ordered</h6>
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover align-middle mb-0 bg-transparent">
+                            <tbody id="orderItemsList">
+                                <!-- Items Injected via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="glass-card p-4">
+                    <h6 class="text-white mb-3 ps-2 border-start border-4 border-success">&nbsp; Payment Summary</h6>
+                    <div class="d-flex justify-content-between text-white-50 mb-2">
+                        <span>Subtotal</span>
+                        <span id="subTotal">₹0</span>
+                    </div>
+                    <div class="d-flex justify-content-between text-white-50 mb-3">
+                        <span>Shipping</span>
+                        <span class="text-success">Free</span>
+                    </div>
+                    <div class="border-top border-secondary pt-3 mt-2">
+                        <div class="d-flex justify-content-between text-white fw-bold fs-5 align-items-center">
+                            <span>Total Amount</span>
+                            <span class="text-accent fs-4" id="grandTotal">₹0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000';
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const params = new URLSearchParams(window.location.search);
+            const orderId = params.get('id');
+
+            if (!orderId) {
+                alert("Invalid Order ID");
+                window.location.href = 'dashboard.html';
+                return;
+            }
+
+            const token = localStorage.getItem('token');
+            if(!token) window.location.href = '../login.html';
+
+            try {
+                // Fetch My Orders to find specific one (In real app, fetch single /orders/:id)
+                const res = await fetch(`${API_URL}/orders/myorders`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if(!res.ok) throw new Error('Failed to fetch orders');
+                
+                const orders = await res.json();
+                const order = orders.find(o => o._id === orderId);
+
+                if (!order) throw new Error("Order not found");
+
+                // Populate Data
+                document.getElementById('orderId').innerText = `#${order._id.slice(-6).toUpperCase()}`;
+                document.getElementById('orderDate').innerText = new Date(order.createdAt).toLocaleString();
+                
+                const address = order.shippingAddress;
+                document.getElementById('shippingAddress').innerText = 
+                    `${address.fullName}, ${address.address}, ${address.city}, ${address.postalCode}, ${address.country}`;
+                
+                // Status Badge Styling
+                const statusEl = document.getElementById('orderStatus');
+                statusEl.innerText = order.status;
+                statusEl.className = `badge fs-6 px-3 py-2 rounded-pill ${getStatusColor(order.status)}`;
+
+                // Items
+                const itemsContainer = document.getElementById('orderItemsList');
+                itemsContainer.innerHTML = order.products.map(item => `
+                    <tr>
+                        <td width="70">
+                            <div class="rounded-3 overflow-hidden border border-secondary" style="width: 60px; height: 60px;">
+                                <img src="${item.product?.image || 'https://via.placeholder.com/60'}" class="w-100 h-100 object-fit-cover">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="text-white fw-medium mb-1">${item.product?.title || 'Unknown Product'}</div>
+                            <div class="text-white-50 small">Quantity: <span class="text-white">${item.quantity}</span></div>
+                        </td>
+                        <td class="text-end">
+                            <div class="text-accent fw-bold">₹${item.price * item.quantity}</div>
+                            <div class="text-white-50 small" style="font-size: 0.75rem;">₹${item.price} each</div>
+                        </td>
+                    </tr>
+                `).join('');
+
+                // Totals
+                document.getElementById('subTotal').innerText = `₹${order.totalAmount}`;
+                document.getElementById('grandTotal').innerText = `₹${order.totalAmount}`;
+
+            } catch (error) {
+                alert("Error loading order details: " + error.message);
+                window.location.href = 'dashboard.html';
+            }
+        });
+
+        function getStatusColor(status) {
+            switch(status) {
+                case 'Delivered': return 'bg-success';
+                case 'Cancelled': return 'bg-danger';
+                case 'Shipped': return 'bg-info text-dark';
+                default: return 'bg-warning text-dark';
+            }
+        }
+    </script>
+</body>
+</html>
