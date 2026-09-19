@@ -1,18 +1,43 @@
 const mongoose = require('mongoose');
 
 const connectDB = async () => {
-    try {
-        // 👇 FIX: Variable ki jagah seedha apna Link yahan daal dein
-        const dbURI = "mongodb+srv://Anushri_db_user:Anushri%40123@ecommercecluster.knufrx7.mongodb.net/ecommerce?retryWrites=true&w=majority";
+    const isProduction = process.env.NODE_ENV === 'production';
+    const primaryURI = process.env.MONGO_URI || (isProduction ? null : "mongodb://127.0.0.1:27017/ecommerce");
+    const localFallbackURI = "mongodb://127.0.0.1:27017/ecommerce";
 
-        console.log("📡 Connecting directly to Atlas...");
-        
-        const conn = await mongoose.connect(dbURI);
-
-        console.log(`MongoDB Connected: ${conn.connection.host}`);
-    } catch (error) {
-        console.log(`❌ Database Error: ${error.message}`);
+    if (isProduction && !primaryURI) {
+        console.error("❌ FATAL: MONGO_URI is required in production mode. Refusing fallback to local database.");
         process.exit(1);
+    }
+
+    try {
+        console.log("📡 Connecting to MongoDB...");
+        const conn = await mongoose.connect(primaryURI, {
+            serverSelectionTimeoutMS: 4000,
+        });
+        console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+    } catch (primaryError) {
+        console.warn(`⚠️ Primary MongoDB Connection Failed: ${primaryError.message}`);
+
+        if (isProduction) {
+            console.error("❌ FATAL: MongoDB is required in production mode. Primary connection failed; refusing fallback to local database.");
+            process.exit(1);
+        }
+
+        if (primaryURI !== localFallbackURI) {
+            try {
+                console.log("🔄 Attempting fallback connection to local MongoDB...");
+                const conn = await mongoose.connect(localFallbackURI, {
+                    serverSelectionTimeoutMS: 2000,
+                });
+                console.log(`✅ Local MongoDB Connected: ${conn.connection.host}`);
+                return;
+            } catch (fallbackError) {
+                console.warn(`⚠️ Local fallback connection also unavailable: ${fallbackError.message}`);
+            }
+        }
+
+        console.warn("⚠️ [Development/Demo Mode] MongoDB is not connected. Application running in offline/demo fallback mode.");
     }
 };
 

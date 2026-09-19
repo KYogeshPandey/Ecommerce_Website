@@ -23,7 +23,19 @@ const productSchema = new mongoose.Schema({
     },
     stock: {
         type: Number,
+        default: 10
+    },
+    rating: {
+        type: Number,
+        default: 4.5
+    },
+    numReviews: {
+        type: Number,
         default: 0
+    },
+    featured: {
+        type: Boolean,
+        default: false
     },
     createdAt: {
         type: Date,

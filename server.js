@@ -20,23 +20,64 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Serve Static Files (Standard)
-app.use(express.static(path.join(__dirname, 'public')));
+const fs = require('fs');
 
-// ✅ FIX 2: Allow accessing static files via /user prefix as well
-// Ye line "Cannot GET /user/cart.html" error ko solve karegi agar aap puraana link use karte hain
-app.use('/user', express.static(path.join(__dirname, 'public'))); 
+const frontendDistPath = path.join(__dirname, 'frontend', 'dist');
+const hasBuiltFrontend = fs.existsSync(frontendDistPath);
 
-// Routes
-app.use('/auth', require('./routes/authRoutes'));
-app.use('/products', require('./routes/productRoutes'));
-app.use('/cart', require('./routes/cartRoutes'));
-app.use('/orders', require('./routes/orderRoutes'));
-app.use('/payment', require('./routes/paymentRoutes'));
-app.use('/user', require('./routes/userRoutes'));  // New user routes for buyer dashboard
+// 1. Primary REST API Routes
+const authRoutes = require('./routes/authRoutes');
+const productRoutes = require('./routes/productRoutes');
+const cartRoutes = require('./routes/cartRoutes');
+const orderRoutes = require('./routes/orderRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
+const userRoutes = require('./routes/userRoutes');
 
-// Serve frontend fallback
-app.get('/', (req, res) => {
+app.use('/api/auth', authRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/payment', paymentRoutes);
+app.use('/api/user', userRoutes);
+
+// 2. Direct API routes with dual support (API requests vs Browser Page Navigation)
+const handleApiOrSpa = (apiRouter) => (req, res, next) => {
+    const isApiRequest = req.method !== 'GET' || 
+                         req.xhr || 
+                         (req.headers.accept && req.headers.accept.includes('application/json')) || 
+                         Boolean(req.headers.authorization);
+    if (isApiRequest) {
+        return apiRouter(req, res, next);
+    }
+    next();
+};
+
+app.use('/auth', authRoutes);
+app.use('/products', handleApiOrSpa(productRoutes));
+app.use('/cart', handleApiOrSpa(cartRoutes));
+app.use('/orders', handleApiOrSpa(orderRoutes));
+app.use('/payment', paymentRoutes);
+
+// 3. Static Assets: Legacy MPA explicitly accessible under /legacy
+app.use('/legacy', express.static(path.join(__dirname, 'public')));
+app.use('/user', express.static(path.join(__dirname, 'public')));
+
+// Serve modern React frontend assets
+if (hasBuiltFrontend) {
+    app.use(express.static(frontendDistPath));
+    console.log("🚀 Serving Modern React Frontend from frontend/dist");
+} else {
+    app.use(express.static(path.join(__dirname, 'public')));
+}
+
+// 4. SPA Fallback: Serve React SPA index.html for all browser navigation
+app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api') || req.path.startsWith('/legacy')) {
+        return next();
+    }
+    if (hasBuiltFrontend) {
+        return res.sendFile(path.join(frontendDistPath, 'index.html'));
+    }
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
