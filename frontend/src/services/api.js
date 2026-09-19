@@ -1,6 +1,10 @@
 // Centralized API service using native fetch with auth injection and response handling
+//
+// VITE_API_URL is injected at build time by Vite from the environment:
+//   - Local dev  : unset (or '') → relative URLs → Vite proxy forwards to localhost:5000
+//   - Vercel prod: set to https://ecommerce-website-feh6.onrender.com → absolute URLs
 
-const API_BASE = '';
+const API_BASE = import.meta.env.VITE_API_URL ?? '';
 
 const getHeaders = (isJson = true) => {
   const headers = {

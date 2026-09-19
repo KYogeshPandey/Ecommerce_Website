@@ -3,6 +3,7 @@ node_modules/
 
 # 2. Security (Sabse Zaroori - Passwords chupaane ke liye)
 .env
+frontend/.env
 
 # 3. Logs (System errors jo upload nahi hone chahiye)
 npm-debug.log
