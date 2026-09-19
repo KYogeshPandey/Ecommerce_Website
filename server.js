@@ -71,7 +71,8 @@ if (hasBuiltFrontend) {
 }
 
 // 4. SPA Fallback: Serve React SPA index.html for all browser navigation
-app.get('*', (req, res, next) => {
+// Express 5 / path-to-regexp v8 requires a named wildcard — bare '*' is rejected.
+app.get('/{*path}', (req, res, next) => {
     if (req.path.startsWith('/api') || req.path.startsWith('/legacy')) {
         return next();
     }
