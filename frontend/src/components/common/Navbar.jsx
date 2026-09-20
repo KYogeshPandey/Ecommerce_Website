@@ -241,13 +241,21 @@ export const Navbar = () => {
                 <div className="flex items-center gap-2">
                   <Link
                     to="/login"
-                    className="px-3.5 py-1.5 rounded-xl text-xs font-semibold text-white hover:text-cyan-400 transition-colors"
+                    className={
+                      location.pathname === '/login'
+                        ? 'px-4 py-1.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 text-xs font-semibold text-white shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/40 hover:brightness-110 transition-all'
+                        : 'px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition-all'
+                    }
                   >
                     Log In
                   </Link>
                   <Link
                     to="/register"
-                    className="hidden sm:inline-flex px-4 py-1.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 text-xs font-semibold text-white shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/40 hover:brightness-110 transition-all"
+                    className={`hidden sm:inline-flex ${
+                      location.pathname === '/login'
+                        ? 'px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition-all'
+                        : 'px-4 py-1.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 text-xs font-semibold text-white shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/40 hover:brightness-110 transition-all'
+                    }`}
                   >
                     Register
                   </Link>
@@ -317,13 +325,21 @@ export const Navbar = () => {
               <div className="pt-2 border-t border-white/10 flex gap-2">
                 <Link
                   to="/login"
-                  className="flex-1 text-center py-2 rounded-xl bg-white/5 text-xs font-semibold text-white border border-white/10"
+                  className={`flex-1 text-center py-2 rounded-xl text-xs font-semibold transition-all ${
+                    location.pathname === '/login'
+                      ? 'bg-gradient-to-r from-cyan-500 to-indigo-600 text-white shadow-md shadow-cyan-500/20'
+                      : 'bg-white/5 text-slate-300 border border-white/10 hover:text-white'
+                  }`}
                 >
                   Log In
                 </Link>
                 <Link
                   to="/register"
-                  className="flex-1 text-center py-2 rounded-xl bg-cyan-500 text-xs font-semibold text-obsidian-950"
+                  className={`flex-1 text-center py-2 rounded-xl text-xs font-semibold transition-all ${
+                    location.pathname === '/login'
+                      ? 'bg-white/5 text-slate-300 border border-white/10 hover:text-white'
+                      : 'bg-gradient-to-r from-cyan-500 to-indigo-600 text-white shadow-md shadow-cyan-500/20'
+                  }`}
                 >
                   Sign Up
                 </Link>
