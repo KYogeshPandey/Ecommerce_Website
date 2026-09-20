@@ -72,7 +72,7 @@ export const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           {/* Brand Info */}
-          <div className="lg:col-span-2 space-y-4">
+          <div id="about" className="lg:col-span-2 space-y-4">
             <Link to="/" className="flex items-center gap-2">
               <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 p-0.5 shadow-md shadow-cyan-500/20">
                 <div className="w-full h-full bg-obsidian-950 rounded-[10px] flex items-center justify-center">
@@ -84,10 +84,10 @@ export const Footer = () => {
               </span>
             </Link>
             <p className="text-slate-400 text-xs sm:text-sm max-w-sm leading-relaxed">
-              Curating high-performance electronics, audio, wearable tech, and designer lifestyle gear. Built for individuals who demand precision and aesthetic perfection.
+              Your trusted online store for electronics, trendy fashion, home essentials, and everyday lifestyle products. Quality items, competitive prices, and reliable delivery right to your doorstep.
             </p>
             <div className="pt-2 text-xs text-slate-500">
-              <p>Designed with Cyber-Glassmorphism UI.</p>
+              <p>Shop smart, live better with ShopEase.</p>
             </div>
           </div>
 
@@ -106,7 +106,7 @@ export const Footer = () => {
           </div>
 
           {/* Customer Care */}
-          <div>
+          <div id="contact">
             <h4 className="text-xs font-bold text-white uppercase tracking-wider font-heading mb-4">
               Customer Hub
             </h4>
@@ -125,7 +125,7 @@ export const Footer = () => {
               Stay Connected
             </h4>
             <p className="text-xs text-slate-400 mb-3">
-              Subscribe for VIP releases, flash drops, and exclusive offers.
+              Subscribe for new arrivals, exclusive discounts, and seasonal offers.
             </p>
             <form onSubmit={handleSubscribe} className="space-y-2">
               <div className="relative">

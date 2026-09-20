@@ -75,7 +75,7 @@ export const LoginPage = () => {
           Welcome Back
         </h1>
         <p className="text-xs text-slate-400 mt-1.5">
-          Sign in to access your orders, cart, and drops.
+          Sign in to access your orders, cart, and wishlist.
         </p>
       </div>
 

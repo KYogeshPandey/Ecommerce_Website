@@ -15,10 +15,10 @@ export const NotFoundPage = () => {
 
         <div className="space-y-2">
           <h2 className="text-2xl font-black text-white font-heading">
-            Lost in Cyberspace
+            Page Not Found
           </h2>
           <p className="text-slate-400 text-xs sm:text-sm">
-            The page coordinate you requested does not exist or has been relocated to another sector.
+            The page you are looking for does not exist or has been moved.
           </p>
         </div>
 
@@ -33,7 +33,7 @@ export const NotFoundPage = () => {
             to="/shop"
             className="px-6 py-3 rounded-xl bg-white/10 hover:bg-white/15 text-white font-semibold text-xs border border-white/15 transition-colors flex items-center justify-center gap-2"
           >
-            <ShoppingBag className="w-4 h-4" /> Browse Catalog
+            <ShoppingBag className="w-4 h-4" /> Shop Products
           </Link>
         </div>
       </div>

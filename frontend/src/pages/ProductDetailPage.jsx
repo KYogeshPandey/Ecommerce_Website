@@ -159,7 +159,7 @@ export const ProductDetailPage = () => {
           </div>
 
           <p className="text-slate-300 text-sm leading-relaxed">
-            {product.description || 'High precision craftsmanship designed for optimal ergonomic comfort and durable performance.'}
+            {product.description || 'Crafted with premium materials designed for optimal comfort and durable everyday performance.'}
           </p>
 
           {/* Quantity & Actions Bar */}
@@ -289,7 +289,7 @@ export const ProductDetailPage = () => {
             <div className="space-y-4">
               <p>{product.description}</p>
               <p>
-                Engineered with high grade aerospace-grade composites and precision internals to deliver uninterrupted reliability. Backed by the ShopEase Quality Guarantee.
+                Crafted with high quality materials to deliver long-lasting reliability and performance. Backed by the ShopEase Quality Guarantee.
               </p>
             </div>
           )}

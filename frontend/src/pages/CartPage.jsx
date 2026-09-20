@@ -54,7 +54,7 @@ export const CartPage = () => {
           </div>
           <h2 className="text-2xl font-black text-white font-heading">Your Cart is Empty</h2>
           <p className="text-slate-400 text-xs sm:text-sm">
-            Explore our curated catalog of next-generation tech, audio gear, and lifestyle essentials.
+            Discover top products, exclusive deals, and everyday essentials.
           </p>
           <div className="pt-4">
             <Link

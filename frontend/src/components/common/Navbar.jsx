@@ -85,7 +85,7 @@ export const Navbar = () => {
               <Link
                 to="/"
                 className={`transition-colors hover:text-cyan-400 ${
-                  location.pathname === '/' ? 'text-cyan-400 font-semibold' : 'text-slate-300'
+                  location.pathname === '/' && !location.hash ? 'text-cyan-400 font-semibold' : 'text-slate-300'
                 }`}
               >
                 Home
@@ -96,20 +96,26 @@ export const Navbar = () => {
                   location.pathname === '/shop' ? 'text-cyan-400 font-semibold' : 'text-slate-300'
                 }`}
               >
-                Shop Catalog
+                Shop
               </Link>
-              <Link
-                to="/shop?category=Electronics"
+              <a
+                href="/#categories"
                 className="text-slate-300 hover:text-cyan-400 transition-colors"
               >
-                Electronics
-              </Link>
-              <Link
-                to="/shop?category=Fashion"
+                Categories
+              </a>
+              <a
+                href="/#about"
                 className="text-slate-300 hover:text-cyan-400 transition-colors"
               >
-                Fashion
-              </Link>
+                About
+              </a>
+              <a
+                href="/#contact"
+                className="text-slate-300 hover:text-cyan-400 transition-colors"
+              >
+                Contact
+              </a>
             </nav>
 
             {/* 3. Search Bar (Desktop) */}
@@ -121,8 +127,8 @@ export const Navbar = () => {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search products, brands..."
-                  aria-label="Search products, brands"
+                  placeholder="Search for products, brands..."
+                  aria-label="Search for products, brands"
                   className="w-full bg-slate-900/60 border border-white/10 rounded-xl py-2 pl-10 pr-4 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all"
                 />
                 <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-2.5" aria-hidden="true" />
@@ -283,8 +289,8 @@ export const Navbar = () => {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search products..."
-                  aria-label="Search products"
+                  placeholder="Search for products, brands..."
+                  aria-label="Search for products, brands"
                   className="w-full bg-slate-900 border border-cyan-500/40 rounded-xl py-2 pl-10 pr-4 text-xs text-white placeholder-slate-400 focus:outline-none"
                   autoFocus
                 />
@@ -299,28 +305,39 @@ export const Navbar = () => {
           <div className="md:hidden glass-panel border-b border-white/10 px-4 pt-3 pb-6 space-y-3">
             <Link
               to="/"
+              onClick={() => setMobileMenuOpen(false)}
               className="block px-3 py-2 rounded-lg text-sm text-slate-200 hover:bg-white/5 font-medium"
             >
               Home
             </Link>
             <Link
               to="/shop"
+              onClick={() => setMobileMenuOpen(false)}
               className="block px-3 py-2 rounded-lg text-sm text-slate-200 hover:bg-white/5 font-medium"
             >
-              Shop Catalog
+              Shop
             </Link>
-            <Link
-              to="/shop?category=Electronics"
+            <a
+              href="/#categories"
+              onClick={() => setMobileMenuOpen(false)}
               className="block px-3 py-2 rounded-lg text-sm text-slate-200 hover:bg-white/5 font-medium"
             >
-              Electronics
-            </Link>
-            <Link
-              to="/shop?category=Fashion"
+              Categories
+            </a>
+            <a
+              href="/#about"
+              onClick={() => setMobileMenuOpen(false)}
               className="block px-3 py-2 rounded-lg text-sm text-slate-200 hover:bg-white/5 font-medium"
             >
-              Fashion
-            </Link>
+              About
+            </a>
+            <a
+              href="/#contact"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-lg text-sm text-slate-200 hover:bg-white/5 font-medium"
+            >
+              Contact
+            </a>
             {!isAuthenticated && (
               <div className="pt-2 border-t border-white/10 flex gap-2">
                 <Link

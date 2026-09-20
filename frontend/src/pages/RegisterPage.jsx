@@ -90,7 +90,7 @@ export const RegisterPage = () => {
           Create an Account
         </h1>
         <p className="text-xs text-slate-400 mt-1.5">
-          Join ShopEase to unlock personalized recommendations & exclusive drops.
+          Join ShopEase to unlock personalized recommendations & exclusive deals.
         </p>
       </div>
 
@@ -253,7 +253,7 @@ export const RegisterPage = () => {
               <p className="text-[10px] text-slate-400">
                 Strength:{' '}
                 <span className="font-semibold text-slate-200">
-                  {strength <= 25 ? 'Weak' : strength <= 50 ? 'Medium' : strength <= 75 ? 'Good' : 'Cyber-Secure'}
+                  {strength <= 25 ? 'Weak' : strength <= 50 ? 'Medium' : strength <= 75 ? 'Good' : 'Very Strong'}
                 </span>
               </p>
             </div>
